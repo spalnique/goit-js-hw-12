@@ -1,3 +1,4 @@
+import axios, { Axios } from 'axios';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 import SimpleLightbox from 'simplelightbox';
@@ -43,6 +44,7 @@ class Gallery {
   #imgData;
   #descData;
   #showDetails;
+  #canPaginate;
 
   constructor(
     data = [],
@@ -193,7 +195,15 @@ class Gallery {
    */
 
   render() {
-    document.querySelector(this.parent).innerHTML = this.#markup;
+    document.querySelector(this.parent).innerHTML += this.#markup;
+    // if (!vars.hasLoadmoreButton) {
+    //   document.querySelector(this.parent).insertAdjacentHTML(
+    //     'afterend',
+    //     `<button class="js-loadmore-button" type="button" name="loadmore">
+    //     Load more
+    //   </button>`
+    //   );
+    // }
     const images = document.querySelectorAll('.js-item-image');
     images.forEach((x, i) =>
       x.addEventListener('load', () => {
@@ -208,10 +218,12 @@ class Gallery {
 ////////////////////////////////////////////////////////////////////////
 
 const refs = {
+  body: document.querySelector('body'),
   form: document.querySelector('.js-search-form'),
   input: document.querySelector('.js-search-input'),
   container: document.querySelector('.js-gallery'),
   checkbox: document.querySelector('.js-search-checkbox'),
+  loadmore: document.querySelector('.js-loadmore-button') || null,
 };
 
 const requestUrl = 'https://pixabay.com/api/';
@@ -226,51 +238,72 @@ const requestParams = {
 
 const spinner = new Spinner('.js-gallery');
 
-refs.form.addEventListener('submit', e => {
-  e.preventDefault();
-  requestParams.q = refs.input.value.trim();
+// refs.form.addEventListener('submit', e => {
+//   e.preventDefault();
+//   axios.defaults.baseURL = 'https://pixabay.com/api/';
+//   axios.defaults.headers.common['header-name'] =
+//     '42242477-df8643eaa45736c853493b589';
+//   axios.get('', { params: requestParams });
+// });
 
-  if (!Gallery.testInput(refs.input.value.trim())) {
-    refs.form.classList.add('centered');
-    Gallery.showPopup('wrong input');
-    refs.form.reset();
-    return;
-  }
-  spinner.add();
+// refs.form.addEventListener('submit', e => {
+//   e.preventDefault();
+//   if (refs.loadmore) {
+//     refs.body.removeChild(refs.loadmore);
+//   }
+//   refs.container.innerHTML = '';
+//   requestParams.q = refs.input.value.trim();
 
-  fetch(`${requestUrl}?${new URLSearchParams(requestParams)}`)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Something went wrong!');
-      }
-      return response.json();
-    })
-    .then(data => {
-      if (!data.hits.length) {
-        refs.form.classList.add('centered');
-        Gallery.showPopup('nothing found');
-        refs.form.reset();
-        return;
-      }
-      refs.form.classList.remove('centered');
-      const gallery = new Gallery(
-        data.hits,
-        '.js-gallery',
-        ['largeImageURL', 'webformatURL', 'tags'],
-        ['likes', 'views', 'comments', 'downloads'],
-        refs.checkbox.checked
-      );
-      const lightboxInstance = new SimpleLightbox('.js-gallery a', {
-        className: 'lightbox-wrapper',
-      });
+//   if (!Gallery.testInput(refs.input.value.trim())) {
+//     refs.form.classList.add('centered');
+//     Gallery.showPopup('wrong input');
+//     refs.form.reset();
+//     return;
+//   }
 
-      spinner.remove();
-      gallery.render();
-      lightboxInstance.refresh();
-      refs.form.reset();
-    })
-    .catch(error => console.log(error));
-});
+//   spinner.add();
+
+//   fetch(`${requestUrl}?${new URLSearchParams(requestParams)}`)
+//     .then(response => {
+//       if (!response.ok) {
+//         throw new Error('Something went wrong!');
+//       }
+//       return response.json();
+//     })
+//     .then(data => {
+//       if (!data.hits.length) {
+//         refs.form.classList.add('centered');
+//         Gallery.showPopup('nothing found');
+//         refs.form.reset();
+//         return;
+//       }
+//       refs.form.classList.remove('centered');
+//       const gallery = new Gallery(
+//         data.hits,
+//         '.js-gallery',
+//         ['largeImageURL', 'webformatURL', 'tags'],
+//         ['likes', 'views', 'comments', 'downloads'],
+//         refs.checkbox.checked
+//       );
+//       const lightboxInstance = new SimpleLightbox('.js-gallery a', {
+//         className: 'lightbox-wrapper',
+//       });
+
+//       spinner.remove();
+//       gallery.render();
+//       lightboxInstance.refresh();
+//       refs.container.insertAdjacentHTML(
+//         'afterend',
+//         `<button class="js-loadmore-button" type="button" name="loadmore">
+//         Load more
+//       </button>`
+//       );
+//       refs.form.reset();
+//       refs.loadmore = document.querySelector('.js-loadmore-button');
+//       refs.loadmore.addEventListener('click', () => gallery.render());
+//     })
+//     .catch(error => console.log(error));
+// });
 
 // Код нижче був зроблений виключно у дослідницьких цілях
 
@@ -281,3 +314,9 @@ refs.form.addEventListener('submit', e => {
 //     }, 100);
 //   }
 // });
+
+// axios.defaults.baseURL = 'https://pixabay.com/api/';
+axios.defaults.headers.common['header-name'] =
+  '42242477-df8643eaa45736c853493b589';
+const result = axios.get('https://pixabay.com/api/', { params: requestParams });
+console.log(result);
