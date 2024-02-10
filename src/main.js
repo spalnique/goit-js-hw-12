@@ -7,25 +7,27 @@ import rejectedIcon from './img/rejectedIcon.svg';
 import closeIcon from './img/izitoast-close.svg';
 
 class Spinner {
-  constructor(parentElemQuery) {
-    this.parent = parentElemQuery;
-  }
+  static markup;
+
+  constructor() {}
 
   /**
    * @description Adds a spinner to the page.
    */
 
-  add() {
-    document.querySelector(this.parent).innerHTML =
-      '<div id="spinner-container" style="padding-top: 25px; display:flex; flex-direction:column; gap:15px; align-items:center;"><span class="js-processing-request">Loading images, please wait...</span><span class="loader"></span></div>';
+  static add() {
+    const spinnerElem = document.createElement('button');
+    document.body.appendChild(spinnerElem);
+    spinnerElem.outerHTML = this.markup;
   }
 
   /**
    * @description Removes previously added spinner from the page.
    */
 
-  remove() {
-    document.querySelector(this.parent).innerHTML = '';
+  static remove() {
+    const spinnerElem = document.querySelector('#spinner-container');
+    document.body.removeChild(spinnerElem);
   }
 }
 
@@ -44,7 +46,6 @@ class Gallery {
   #imgData;
   #descData;
   #showDetails;
-  #canPaginate;
 
   constructor(
     data = [],
@@ -73,6 +74,13 @@ class Gallery {
       return false;
     }
     return /^[a-z\s]+$/gi.test(userInput.trim());
+  }
+
+  static async fetchImages(url, requestConfig) {
+    const data = await axios.get(url, {
+      params: requestConfig,
+    });
+    return data;
   }
 
   /**
@@ -196,15 +204,9 @@ class Gallery {
 
   render() {
     document.querySelector(this.parent).innerHTML += this.#markup;
-    // if (!vars.hasLoadmoreButton) {
-    //   document.querySelector(this.parent).insertAdjacentHTML(
-    //     'afterend',
-    //     `<button class="js-loadmore-button" type="button" name="loadmore">
-    //     Load more
-    //   </button>`
-    //   );
-    // }
+
     const images = document.querySelectorAll('.js-item-image');
+
     images.forEach((x, i) =>
       x.addEventListener('load', () => {
         document
@@ -226,84 +228,109 @@ const refs = {
   loadmore: document.querySelector('.js-loadmore-button') || null,
 };
 
-const requestUrl = 'https://pixabay.com/api/';
-
-const requestParams = {
-  key: '42242477-df8643eaa45736c853493b589',
-  image_type: 'photo',
-  orientation: 'horizontal',
-  safesearch: true,
-  q: null,
+const request = {
+  url: 'https://pixabay.com/api/',
+  config: {
+    key: '42242477-df8643eaa45736c853493b589',
+    image_type: 'photo',
+    orientation: 'horizontal',
+    safesearch: true,
+    q: null,
+    page: 1,
+    per_page: 15,
+  },
 };
 
-const spinner = new Spinner('.js-gallery');
+Spinner.markup =
+  '<div id="spinner-container" style="padding-top: 25px; display:flex; flex-direction:column; gap:15px; align-items:center;"><span class="js-processing-request">Loading images, please wait...</span><span class="loader"></span></div>';
 
-// refs.form.addEventListener('submit', e => {
-//   e.preventDefault();
-//   axios.defaults.baseURL = 'https://pixabay.com/api/';
-//   axios.defaults.headers.common['header-name'] =
-//     '42242477-df8643eaa45736c853493b589';
-//   axios.get('', { params: requestParams });
-// });
+refs.form.addEventListener('submit', async e => {
+  e.preventDefault();
+  if (refs.loadmore) {
+    refs.body.removeChild(refs.loadmore);
+  }
+  request.config.q = refs.input.value.trim();
+  refs.container.innerHTML = '';
 
-// refs.form.addEventListener('submit', e => {
-//   e.preventDefault();
-//   if (refs.loadmore) {
-//     refs.body.removeChild(refs.loadmore);
-//   }
-//   refs.container.innerHTML = '';
-//   requestParams.q = refs.input.value.trim();
+  if (!Gallery.testInput(refs.input.value.trim())) {
+    refs.form.classList.add('centered');
+    Gallery.showPopup('wrong input');
+    refs.form.reset();
+    return;
+  }
 
-//   if (!Gallery.testInput(refs.input.value.trim())) {
-//     refs.form.classList.add('centered');
-//     Gallery.showPopup('wrong input');
-//     refs.form.reset();
-//     return;
-//   }
+  try {
+    Spinner.add();
+    const rawData = await Gallery.fetchImages(request.url, request.config);
+    console.log(rawData);
 
-//   spinner.add();
+    if (!rawData.data.hits.length) {
+      Spinner.remove();
+      refs.form.classList.add('centered');
+      Gallery.showPopup('nothing found');
+      refs.form.reset();
+      return;
+    }
 
-//   fetch(`${requestUrl}?${new URLSearchParams(requestParams)}`)
-//     .then(response => {
-//       if (!response.ok) {
-//         throw new Error('Something went wrong!');
-//       }
-//       return response.json();
-//     })
-//     .then(data => {
-//       if (!data.hits.length) {
-//         refs.form.classList.add('centered');
-//         Gallery.showPopup('nothing found');
-//         refs.form.reset();
-//         return;
-//       }
-//       refs.form.classList.remove('centered');
-//       const gallery = new Gallery(
-//         data.hits,
-//         '.js-gallery',
-//         ['largeImageURL', 'webformatURL', 'tags'],
-//         ['likes', 'views', 'comments', 'downloads'],
-//         refs.checkbox.checked
-//       );
-//       const lightboxInstance = new SimpleLightbox('.js-gallery a', {
-//         className: 'lightbox-wrapper',
-//       });
+    refs.form.classList.remove('centered');
 
-//       spinner.remove();
-//       gallery.render();
-//       lightboxInstance.refresh();
-//       refs.container.insertAdjacentHTML(
-//         'afterend',
-//         `<button class="js-loadmore-button" type="button" name="loadmore">
-//         Load more
-//       </button>`
-//       );
-//       refs.form.reset();
-//       refs.loadmore = document.querySelector('.js-loadmore-button');
-//       refs.loadmore.addEventListener('click', () => gallery.render());
-//     })
-//     .catch(error => console.log(error));
-// });
+    const gallery = new Gallery(
+      rawData.data.hits,
+      '.js-gallery',
+      ['largeImageURL', 'webformatURL', 'tags'],
+      ['likes', 'views', 'comments', 'downloads'],
+      refs.checkbox.checked
+    );
+    const lightboxInstance = new SimpleLightbox('.js-gallery a', {
+      className: 'lightbox-wrapper',
+    });
+
+    Spinner.remove();
+    gallery.render();
+    lightboxInstance.refresh();
+    refs.form.reset();
+
+    const loadMoreButton = document.createElement('button');
+    document.body.appendChild(loadMoreButton);
+    loadMoreButton.outerHTML = `<button class="js-loadmore-button" type="button" name="loadmore">Load more</button>`;
+    refs.loadmore = document.querySelector('.js-loadmore-button');
+    if (rawData.data.totalHits.length <= 15) {
+      refs.loadmore.style = 'opacity: 0; visibility: hidden';
+    }
+
+    refs.loadmore.addEventListener('click', async () => {
+      request.config.page += 1;
+      refs.loadmore.style = 'opacity: 0; visibility: hidden';
+      try {
+        Spinner.add();
+        const newPageData = await Gallery.fetchImages(
+          request.url,
+          request.config
+        );
+
+        console.log(newPageData);
+
+        const newPage = new Gallery(
+          newPageData.data.hits,
+          '.js-gallery',
+          ['largeImageURL', 'webformatURL', 'tags'],
+          ['likes', 'views', 'comments', 'downloads'],
+          refs.checkbox.checked
+        );
+        Spinner.remove();
+        newPage.render();
+        lightboxInstance.refresh();
+        if (rawData.data.totalHits.length <= 15) {
+          refs.loadmore.style = 'opacity: 1; visibility: visible';
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 // Код нижче був зроблений виключно у дослідницьких цілях
 
@@ -314,9 +341,3 @@ const spinner = new Spinner('.js-gallery');
 //     }, 100);
 //   }
 // });
-
-// axios.defaults.baseURL = 'https://pixabay.com/api/';
-axios.defaults.headers.common['header-name'] =
-  '42242477-df8643eaa45736c853493b589';
-const result = axios.get('https://pixabay.com/api/', { params: requestParams });
-console.log(result);

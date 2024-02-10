@@ -17,7 +17,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./css/styles.css" />
-    <title>HW_11</title>
+    <title>HW_12</title>
   </head>
   <body>
     <form class="js-search-form centered">
@@ -33,13 +33,21 @@
         Search
       </button>
       <div class="js-checkbox-container">
-        <input class="js-search-checkbox" name="checkbox" type="checkbox" checked/>
+        <input
+          class="js-search-checkbox"
+          name="checkbox"
+          type="checkbox"
+          checked
+        />
         <p>Show details</p>
       </div>
     </form>
 
     <ul class="js-gallery"></ul>
-    <script type="module" src="./main.js"></script>
+    <button class="js-loadmore-button visible" type="button" name="loadmore">
+      Load more
+    </button>
+    <script type="module" src="./final.js"></script>
     <script>
       window.addEventListener(
         'load',
