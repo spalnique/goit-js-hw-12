@@ -7,7 +7,6 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 
 async function onclick(e) {
   e.preventDefault();
-  refs.checkbox.checked = vars.isChecked;
   try {
     Element.hide(refs.loadmore);
     Spinner.add();
@@ -41,7 +40,7 @@ async function onclick(e) {
       '.js-gallery',
       imgData,
       descData,
-      vars.isChecked,
+      refs.checkbox.checked
     );
 
     const lightboxInstance = new SimpleLightbox('.js-gallery a', {
@@ -101,9 +100,7 @@ Element.hide(refs.loadmore);
 
 Spinner.markup =
   '<div id="spinner-container" style="padding-top: 25px; display:flex; flex-direction:column; gap:15px; align-items:center;"><span class="js-processing-request">Loading images, please wait...</span><span class="loader"></span></div>';
-  
 
-refs.ckeckbox.addEventListener('click', ()=> vars.isChecked = !vars.isChecked);
 refs.form.addEventListener('submit', onclick);
 refs.loadmore.addEventListener('click', onclick);
 document.querySelector('.js-gallery-item');
