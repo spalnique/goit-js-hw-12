@@ -197,6 +197,7 @@ button {
   justify-content: space-between;
   align-items: center;
   padding: 8px 16px;
+  transition: display 250ms cubic-bezier(0.47, 0, 0.745, 0.715);
 }
 
 .js-desc-wrapper {

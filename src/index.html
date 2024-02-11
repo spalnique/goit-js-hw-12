@@ -17,7 +17,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./css/styles.css" />
-    <title>localhost hw12</title>
+    <title>HW 12</title>
   </head>
   <body>
     <form class="js-search-form">
@@ -26,7 +26,7 @@
         type="text"
         name="search"
         placeholder="Search images..."
-        required
+        autofocus
       />
 
       <button class="js-search-button" type="submit" name="search">
@@ -53,7 +53,6 @@
         'load',
         () => {
           document.body.classList.add('visible');
-          document.querySelector('.js-search-input').focus();
         },
         { once: true }
       );

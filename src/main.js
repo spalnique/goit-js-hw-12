@@ -25,9 +25,11 @@ async function onclick(event) {
     await requestResult.get();
     const imgData = requestResult.imgData;
     const descData = requestResult.descData;
-    const totalHits = requestResult.data.data.totalHits;
+    const imagesFound = requestResult.data.data.totalHits;
+    const imagesShown =
+      requestParams.config.per_page * requestParams.config.page;
 
-    if (!totalHits) {
+    if (!imagesFound) {
       render.Spinner.remove();
       render.Gallery.showPopup('nothing found');
       refs.form.reset();
@@ -41,18 +43,11 @@ async function onclick(event) {
       refs.checkbox.checked
     );
 
-    const lightboxInstance = new SimpleLightbox('.js-gallery a', {
-      className: 'lightbox-wrapper',
-    });
-
     render.Spinner.remove();
     gallery.render('.js-item-image', '.js-gallery-item');
     lightboxInstance.refresh();
 
-    if (
-      totalHits - requestParams.config.per_page * requestParams.config.page >
-      0
-    ) {
+    if (imagesFound - imagesShown > 0) {
       render.Element.show(refs.loadmore);
     } else {
       render.Gallery.showPopup('sorry');
@@ -71,9 +66,6 @@ const refs = {
   container: document.querySelector('.js-gallery'),
   checkbox: document.querySelector('.js-search-checkbox'),
   loadmore: document.querySelector('.js-loadmore-button'),
-  getElem(elemQuery) {
-    return document.querySelector(elemQuery);
-  },
 };
 
 const requestParams = {
@@ -97,6 +89,10 @@ const requestResult = new FetchPixabay(
   ['likes', 'views', 'comments', 'downloads']
 );
 
+const lightboxInstance = new SimpleLightbox('.js-gallery a', {
+  className: 'lightbox-wrapper',
+});
+
 render.Element.hide(refs.loadmore);
 
 render.Spinner.markup =
@@ -107,6 +103,26 @@ refs.form.addEventListener('submit', async e => {
 });
 refs.loadmore.addEventListener('click', async e => {
   await onclick(e);
-  render.smoothScroll(refs.container);
+  render.smoothScroll(refs.container, refs.checkbox.checked);
 });
-// refs.checkbox.addEventListener('click', () => {});
+
+// Код нижче був зроблений виключно у дослідницьких цілях
+
+refs.input.addEventListener('input', e => {
+  if (!/^[a-z\s]+$/gi.test(e.target.value)) {
+    setTimeout(() => {
+      e.target.value = e.target.value.slice(0, -1);
+    }, 100);
+  }
+});
+
+refs.checkbox.addEventListener('click', () => {
+  if (!refs.container.innerHTML) return;
+
+  const descriptionElem = document.querySelectorAll('.js-item-desc');
+  descriptionElem.forEach(x =>
+    refs.checkbox.checked
+      ? (x.style.display = 'flex')
+      : (x.style.display = 'none')
+  );
+});
