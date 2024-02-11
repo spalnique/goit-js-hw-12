@@ -147,7 +147,7 @@ export class Gallery {
   #createMarkup(imageData, descriptionData) {
     const description = descriptionData.map(x =>
       this.showDesc
-        ? `<ul class="js-item-desc" style="margin-top: 0;">
+        ? `<ul class="js-item-desc style="margin-top: 0; transition-duration: 250ms;">
             <li class="js-desc-wrapper">
               <span class="js-desc-prop">Likes</span>
               <span class="js-desc-value">${x.likes}</span>
@@ -165,7 +165,7 @@ export class Gallery {
               <span class="js-desc-value">${x.downloads}</span>
             </li>
           </ul>`
-        : `<ul class="js-item-desc" style="margin-top: -56px;">
+        : `<ul class="js-item-desc style="margin-top: -56px; transition-duration: 450ms;">
             <li class="js-desc-wrapper">
               <span class="js-desc-prop">Likes</span>
               <span class="js-desc-value">${x.likes}</span>
@@ -187,8 +187,8 @@ export class Gallery {
     const markup = imageData
       .map((x, i) =>
         this.showDesc
-          ? `<li class="js-gallery-item" style="height: 256px"><a class="js-image-container" href="${x.largeImageURL}"><img class="js-item-image" src="${x.webformatURL}" alt="${x.tags}" /></a>${description[i]}</li>`
-          : `<li class="js-gallery-item" style="height: 200px"><a class="js-image-container" href="${x.largeImageURL}"><img class="js-item-image" src="${x.webformatURL}" alt="${x.tags}" /></a>${description[i]}</li>`
+          ? `<li class="js-gallery-item" style="height: 256px; transition-duration: 250ms;"><a class="js-image-container" href="${x.largeImageURL}"><img class="js-item-image" src="${x.webformatURL}" alt="${x.tags}" /></a>${description[i]}</li>`
+          : `<li class="js-gallery-item" style="height: 200px; transition-duration: 450ms;"><a class="js-image-container" href="${x.largeImageURL}"><img class="js-item-image" src="${x.webformatURL}" alt="${x.tags}" /></a>${description[i]}</li>`
       )
       .join('\n\n');
     return markup;

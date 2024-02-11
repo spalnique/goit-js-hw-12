@@ -109,7 +109,7 @@ refs.loadmore.addEventListener('click', async e => {
 // Код нижче був зроблений виключно у дослідницьких цілях
 
 refs.input.addEventListener('input', e => {
-  if (!/^[a-z\s]+$/gi.test(e.target.value)) {
+  if (!/^[a-z0-9\.\s]+$/gi.test(e.target.value)) {
     setTimeout(() => {
       e.target.value = e.target.value.slice(0, -1);
     }, 100);
@@ -121,9 +121,19 @@ refs.checkbox.addEventListener('click', () => {
 
   const descriptionElem = document.querySelectorAll('.js-item-desc');
   descriptionElem.forEach(x => {
-    refs.checkbox.checked ? (x.style.marginTop = '0') : (x.style.marginTop = '-56px');
+    refs.checkbox.checked
+      ? (x.style.transitionDuration = '450ms')
+      : (x.style.transitionDuration = '250ms');
+    refs.checkbox.checked
+      ? (x.parentElement.style.transitionDuration = '250ms')
+      : (x.parentElement.style.transitionDuration = '450ms');
+    refs.checkbox.checked
+      ? (x.style.marginTop = '0')
+      : (x.style.marginTop = '-56px');
     refs.checkbox.checked
       ? (x.parentElement.style.height = '256px')
       : (x.parentElement.style.height = '200px');
+    // setTimeout(() => {}, 50);
+    // setTimeout(() => {}, 50);
   });
 });
