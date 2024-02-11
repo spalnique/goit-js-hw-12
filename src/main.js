@@ -133,7 +133,5 @@ refs.checkbox.addEventListener('click', () => {
     refs.checkbox.checked
       ? (x.parentElement.style.height = '256px')
       : (x.parentElement.style.height = '200px');
-    // setTimeout(() => {}, 50);
-    // setTimeout(() => {}, 50);
   });
 });
