@@ -75,6 +75,6 @@ export class FetchPixabay {
     if (!userInput.trim()) {
       return false;
     }
-    return /^[a-z\s]+$/gi.test(userInput.trim());
+    return /^[a-z0-9\s]+$/gi.test(userInput.trim());
   }
 }

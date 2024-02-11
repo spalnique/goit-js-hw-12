@@ -5,6 +5,7 @@ import 'izitoast/dist/css/iziToast.min.css';
 
 /**
  * @class - Provides developer with static methods allowing to add and remove loading spinner.
+ * @var markup - Static variable which value needs to be set by developer specifying spinner markup.
  * @method add() - Adds a spinner as a child of body element.
  * @method remove() - Removes last added spinner.
  */
@@ -14,19 +15,11 @@ export class Spinner {
 
   constructor() {}
 
-  /**
-   * @description Adds a spinner to the page.
-   */
-
   static add() {
     const spinnerElem = document.createElement('button');
     document.body.appendChild(spinnerElem);
     spinnerElem.outerHTML = this.markup;
   }
-
-  /**
-   * @description Removes previously added spinner from the page.
-   */
 
   static remove() {
     const spinnerElem = document.querySelector('#spinner-container');

@@ -50,17 +50,17 @@ async function onclick(e) {
     Spinner.remove();
     gallery.render('.js-item-image', '.js-gallery-item');
     lightboxInstance.refresh();
-    refs.form.reset();
 
     if (
       totalHits - requestParams.config.per_page * requestParams.config.page >
-      15
+      0
     ) {
       Element.show(refs.loadmore);
     } else {
-      Element.hide(refs.loadmore);
       Gallery.showPopup('sorry');
+      refs.form.reset();
     }
+    refs.input.value = '';
   } catch (error) {
     console.log(error);
   }
@@ -73,10 +73,6 @@ const refs = {
   container: document.querySelector('.js-gallery'),
   checkbox: document.querySelector('.js-search-checkbox'),
   loadmore: document.querySelector('.js-loadmore-button'),
-};
-
-const vars = {
-  canLoadmore: false,
 };
 
 const requestParams = {
@@ -107,3 +103,4 @@ Spinner.markup =
 
 refs.form.addEventListener('submit', onclick);
 refs.loadmore.addEventListener('click', onclick);
+document.querySelector('.js-gallery-item');
