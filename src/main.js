@@ -120,9 +120,10 @@ refs.checkbox.addEventListener('click', () => {
   if (!refs.container.innerHTML) return;
 
   const descriptionElem = document.querySelectorAll('.js-item-desc');
-  descriptionElem.forEach(x =>
+  descriptionElem.forEach(x => {
+    refs.checkbox.checked ? (x.style.marginTop = '0') : (x.style.marginTop = '-56px');
     refs.checkbox.checked
-      ? (x.style.display = 'flex')
-      : (x.style.display = 'none')
-  );
+      ? (x.parentElement.style.height = '256px')
+      : (x.parentElement.style.height = '200px');
+  });
 });

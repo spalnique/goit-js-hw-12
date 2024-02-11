@@ -145,10 +145,9 @@ export class Gallery {
    */
 
   #createMarkup(imageData, descriptionData) {
-    const description = this.showDesc
-      ? descriptionData.map(
-          x =>
-            `<ul class="js-item-desc">
+    const description = descriptionData.map(x =>
+      this.showDesc
+        ? `<ul class="js-item-desc" style="margin-top: 0;">
             <li class="js-desc-wrapper">
               <span class="js-desc-prop">Likes</span>
               <span class="js-desc-value">${x.likes}</span>
@@ -166,17 +165,30 @@ export class Gallery {
               <span class="js-desc-value">${x.downloads}</span>
             </li>
           </ul>`
-        )
-      : '';
-
+        : `<ul class="js-item-desc" style="margin-top: -56px;">
+            <li class="js-desc-wrapper">
+              <span class="js-desc-prop">Likes</span>
+              <span class="js-desc-value">${x.likes}</span>
+            </li>
+            <li class="js-desc-wrapper">
+              <span class="js-desc-prop">Views</span>
+              <span class="js-desc-value">${x.views}</span>
+            </li>
+            <li class="js-desc-wrapper">
+              <span class="js-desc-prop">Comments</span>
+              <span class="js-desc-value">${x.comments}</span>
+            </li>
+            <li class="js-desc-wrapper">
+              <span class="js-desc-prop">Downloads</span>
+              <span class="js-desc-value">${x.downloads}</span>
+            </li>
+          </ul>`
+    );
     const markup = imageData
-      .map(
-        (x, i) =>
-          `<li class="js-gallery-item"><a class="js-image-container" href="${
-            x.largeImageURL
-          }"><img class="js-item-image" src="${x.webformatURL}" alt="${
-            x.tags
-          }" /></a>${description ? description[i] : ''}</li>`
+      .map((x, i) =>
+        this.showDesc
+          ? `<li class="js-gallery-item" style="height: 256px"><a class="js-image-container" href="${x.largeImageURL}"><img class="js-item-image" src="${x.webformatURL}" alt="${x.tags}" /></a>${description[i]}</li>`
+          : `<li class="js-gallery-item" style="height: 200px"><a class="js-image-container" href="${x.largeImageURL}"><img class="js-item-image" src="${x.webformatURL}" alt="${x.tags}" /></a>${description[i]}</li>`
       )
       .join('\n\n');
     return markup;
