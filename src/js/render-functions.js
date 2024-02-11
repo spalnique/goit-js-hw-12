@@ -48,6 +48,10 @@ export class Element {
   static hide(elem) {
     elem.classList.remove('visible');
   }
+
+  static isVisible(elem) {
+    return elem.classList.contains('visible');
+  }
 }
 
 /**
@@ -72,7 +76,7 @@ export class Gallery {
   }
 
   /**
-   * @param {string} result Accepts one of two strings: 'wrong input' | 'nothing found'.
+   * @param {string} result Accepts one of two strings: 'wrong input' | 'nothing found | 'sorry'.
    * @description Displays a popup area providing user with a feedback from the app.
    */
 
@@ -84,9 +88,21 @@ export class Gallery {
       message:
         requestResult === 'wrong input'
           ? 'Try something like "kitty", "best friends", "on the Moon" ;)'
+          : requestResult === 'sorry'
+          ? "We're sorry, but you've reached the end of search results."
           : 'Sorry, there are no images matching your search query. Please try again!',
-      backgroundColor: requestResult === 'wrong input' ? '#e0c34c' : '#ef4040',
-      progressBarColor: requestResult === 'wrong input' ? '#f7e28b' : '#b51b1b',
+      backgroundColor:
+        requestResult === 'wrong input'
+          ? '#e0c34c'
+          : requestResult === 'sorry'
+          ? '#278edd'
+          : '#ef4040',
+      progressBarColor:
+        requestResult === 'wrong input'
+          ? '#f7e28b'
+          : requestResult === 'sorry'
+          ? '#4eb2ff'
+          : '#b51b1b',
       messageSize: '16px',
       position: 'topRight',
       displayMode: 'replace',
