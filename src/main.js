@@ -1,22 +1,24 @@
 import { FetchPixabay } from './js/pixabay-api';
-import { Spinner } from './js/render-functions';
-import { Element } from './js/render-functions';
-import { Gallery } from './js/render-functions';
+// import { Spinner } from './js/render-functions';
+// import { Element } from './js/render-functions';
+// import { Gallery } from './js/render-functions';
+import * as render from './js/render-functions';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
+
 
 async function onclick(e) {
   e.preventDefault();
   try {
-    Element.hide(refs.loadmore);
+    render.Element.hide(refs.loadmore);
     Spinner.add();
     if (e.type === 'submit') {
       refs.container.innerHTML = '';
       requestParams.config.q = refs.input.value.trim();
       requestParams.config.page = 1;
       if (!FetchPixabay.testUserInput(refs.input.value.trim())) {
-        Spinner.remove();
-        Gallery.showPopup('wrong input');
+        render.Spinner.remove();
+        render.Gallery.showPopup('wrong input');
         refs.form.reset();
         return;
       }
@@ -30,8 +32,8 @@ async function onclick(e) {
     const totalHits = requestResult.data.data.totalHits;
 
     if (!totalHits) {
-      Spinner.remove();
-      Gallery.showPopup('nothing found');
+      render.Spinner.remove();
+      render.Gallery.showPopup('nothing found');
       refs.form.reset();
       return;
     }
@@ -47,7 +49,7 @@ async function onclick(e) {
       className: 'lightbox-wrapper',
     });
 
-    Spinner.remove();
+    render.Spinner.remove();
     gallery.render('.js-item-image', '.js-gallery-item');
     lightboxInstance.refresh();
 
@@ -55,9 +57,9 @@ async function onclick(e) {
       totalHits - requestParams.config.per_page * requestParams.config.page >
       0
     ) {
-      Element.show(refs.loadmore);
+      render.Element.show(refs.loadmore);
     } else {
-      Gallery.showPopup('sorry');
+      render.Gallery.showPopup('sorry');
       refs.form.reset();
     }
     refs.input.value = '';
@@ -96,9 +98,9 @@ const requestResult = new FetchPixabay(
   ['likes', 'views', 'comments', 'downloads']
 );
 
-Element.hide(refs.loadmore);
+render.Element.hide(refs.loadmore);
 
-Spinner.markup =
+render.Spinner.markup =
   '<div id="spinner-container" style="padding-top: 25px; display:flex; flex-direction:column; gap:15px; align-items:center;"><span class="js-processing-request">Loading images, please wait...</span><span class="loader"></span></div>';
 
 refs.form.addEventListener('submit', onclick);

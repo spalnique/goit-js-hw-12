@@ -5,7 +5,7 @@ import 'izitoast/dist/css/iziToast.min.css';
 
 /**
  * @class - Provides developer with static methods allowing to add and remove loading spinner.
- * @var markup - Static variable which value needs to be set by developer specifying spinner markup.
+ * @var markup - Static property which value needs to be set by developer specifying spinner markup.
  * @method add() - Adds a spinner as a child of body element.
  * @method remove() - Removes last added spinner.
  */
@@ -35,11 +35,13 @@ export class Element {
   constructor() {}
 
   static show(elem) {
+    elem.classList.remove('hidden');
     elem.classList.add('visible');
   }
 
   static hide(elem) {
     elem.classList.remove('visible');
+    elem.classList.add('hidden');
   }
 
   static isVisible(elem) {
