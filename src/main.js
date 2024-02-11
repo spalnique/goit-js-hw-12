@@ -1,18 +1,14 @@
 import { FetchPixabay } from './js/pixabay-api';
-// import { Spinner } from './js/render-functions';
-// import { Element } from './js/render-functions';
-// import { Gallery } from './js/render-functions';
 import * as render from './js/render-functions';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
-
-async function onclick(e) {
-  e.preventDefault();
+async function onclick(event) {
+  event.preventDefault();
   try {
     render.Element.hide(refs.loadmore);
-    Spinner.add();
-    if (e.type === 'submit') {
+    render.Spinner.add();
+    if (event.type === 'submit') {
       refs.container.innerHTML = '';
       requestParams.config.q = refs.input.value.trim();
       requestParams.config.page = 1;
@@ -38,7 +34,7 @@ async function onclick(e) {
       return;
     }
 
-    const gallery = new Gallery(
+    const gallery = new render.Gallery(
       '.js-gallery',
       imgData,
       descData,
@@ -75,6 +71,9 @@ const refs = {
   container: document.querySelector('.js-gallery'),
   checkbox: document.querySelector('.js-search-checkbox'),
   loadmore: document.querySelector('.js-loadmore-button'),
+  getElem(elemQuery) {
+    return document.querySelector(elemQuery);
+  },
 };
 
 const requestParams = {
@@ -103,6 +102,11 @@ render.Element.hide(refs.loadmore);
 render.Spinner.markup =
   '<div id="spinner-container" style="padding-top: 25px; display:flex; flex-direction:column; gap:15px; align-items:center;"><span class="js-processing-request">Loading images, please wait...</span><span class="loader"></span></div>';
 
-refs.form.addEventListener('submit', onclick);
-refs.loadmore.addEventListener('click', onclick);
-document.querySelector('.js-gallery-item');
+refs.form.addEventListener('submit', async e => {
+  await onclick(e);
+});
+refs.loadmore.addEventListener('click', async e => {
+  await onclick(e);
+  render.smoothScroll(refs.container);
+});
+// refs.checkbox.addEventListener('click', () => {});

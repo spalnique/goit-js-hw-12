@@ -200,3 +200,14 @@ export class Gallery {
     );
   }
 }
+export function smoothScroll(itemParentElem) {
+  const containerCSSStyles = window.getComputedStyle(itemParentElem);
+  const containerGap = parseFloat(containerCSSStyles.rowGap);
+  const itemHeight = parseFloat(
+    itemParentElem.lastChild.getBoundingClientRect().height
+  );
+  window.scrollBy({
+    top: itemHeight * 2.75 + containerGap,
+    behavior: 'smooth',
+  });
+}
