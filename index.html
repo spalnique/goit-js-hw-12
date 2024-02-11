@@ -17,11 +17,11 @@
       rel="stylesheet"
     />
     
-    <title>localhost hw12</title>
+    <title>HW 12</title>
     <script type="module" crossorigin src="/goit-js-hw-12/commonHelpers.js"></script>
     <link rel="modulepreload" crossorigin href="/goit-js-hw-12/assets/vendor-527658dd.js">
     <link rel="stylesheet" href="/goit-js-hw-12/assets/vendor-cf6910df.css">
-    <link rel="stylesheet" href="/goit-js-hw-12/assets/index-7755ff33.css">
+    <link rel="stylesheet" href="/goit-js-hw-12/assets/index-71d149e4.css">
   </head>
   <body>
     <form class="js-search-form">
@@ -30,7 +30,7 @@
         type="text"
         name="search"
         placeholder="Search images..."
-        required
+        autofocus
       />
 
       <button class="js-search-button" type="submit" name="search">
@@ -57,7 +57,6 @@
         'load',
         () => {
           document.body.classList.add('visible');
-          document.querySelector('.js-search-input').focus();
         },
         { once: true }
       );
