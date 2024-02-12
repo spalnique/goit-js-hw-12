@@ -96,7 +96,7 @@ const lightboxInstance = new SimpleLightbox('.js-gallery a', {
 render.Element.hide(refs.loadmore);
 
 render.Spinner.markup =
-  '<div id="spinner-container" style="padding-top: 25px; display:flex; flex-direction:column; gap:15px; align-items:center;"><span class="js-processing-request">Loading images, please wait...</span><span class="loader"></span></div>';
+  '<div id="spinner-container" style="padding-top: 25px; display:flex; flex-direction:column; gap:15px; align-items:center;"><span class="js-processing-request">Loading images, please wait...</span><div class="loader"></div></div>';
 
 refs.form.addEventListener('submit', async e => {
   await onclick(e);
