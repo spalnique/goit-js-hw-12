@@ -26,6 +26,7 @@
         type="text"
         name="search"
         placeholder="Search images..."
+        autofocus
       />
 
       <button class="js-search-button" type="submit" name="search">
@@ -52,7 +53,6 @@
         'load',
         () => {
           document.body.classList.add('visible');
-          document.querySelector('.js-search-input').focus();
         },
         { once: true }
       );
