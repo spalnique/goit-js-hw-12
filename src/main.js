@@ -108,13 +108,13 @@ refs.loadmore.addEventListener('click', async e => {
 
 // Код нижче був зроблений виключно у дослідницьких цілях
 
-refs.input.addEventListener('input', e => {
-  if (!/^[a-z0-9\.\s]+$/gi.test(e.target.value)) {
-    setTimeout(() => {
-      e.target.value = e.target.value.slice(0, -1);
-    }, 100);
-  }
-});
+// refs.input.addEventListener('input', e => {
+//   if (!/^[a-z0-9\.\s]+$/gi.test(e.target.value)) {
+//     setTimeout(() => {
+//       e.target.value = e.target.value.slice(0, -1);
+//     }, 100);
+//   }
+// });
 
 refs.checkbox.addEventListener('click', () => {
   if (!refs.container.innerHTML) return;
