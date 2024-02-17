@@ -6,7 +6,6 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 async function onclick(event) {
   event.preventDefault();
   try {
-    render.Element.hide(refs.loadmore);
     render.Spinner.add();
     if (event.type === 'submit') {
       refs.container.innerHTML = '';
@@ -23,9 +22,7 @@ async function onclick(event) {
     }
 
     await requestResult.get();
-    const imgData = requestResult.imgData;
-    const descData = requestResult.descData;
-    const imagesFound = requestResult.data.data.totalHits;
+    const imagesFound = requestResult.totalHits;
     const imagesShown =
       requestParams.config.per_page * requestParams.config.page;
 
@@ -38,19 +35,25 @@ async function onclick(event) {
 
     const gallery = new render.Gallery(
       '.js-gallery',
-      imgData,
-      descData,
+      requestResult.data,
       refs.checkbox.checked
     );
 
+    refs.checkbox.removeEventListener('click', () =>
+      gallery.toggleDesc('.js-item-desc', refs.checkbox.checked)
+    );
     render.Spinner.remove();
     gallery.render('.js-item-image', '.js-gallery-item');
+    refs.checkbox.addEventListener('click', () =>
+      gallery.toggleDesc('.js-item-desc', refs.checkbox.checked)
+    );
     lightboxInstance.refresh();
 
     if (imagesFound - imagesShown > 0) {
       render.Element.show(refs.loadmore);
     } else {
       render.Gallery.showPopup('sorry');
+      render.Element.hide(refs.loadmore);
       refs.form.reset();
     }
     refs.input.value = '';
@@ -82,18 +85,22 @@ const requestParams = {
 };
 
 const requestResult = new FetchPixabay(
-  1,
   requestParams.url,
   requestParams.config,
-  ['largeImageURL', 'webformatURL', 'tags'],
-  ['likes', 'views', 'comments', 'downloads']
+  [
+    'largeImageURL',
+    'webformatURL',
+    'tags',
+    'likes',
+    'views',
+    'comments',
+    'downloads',
+  ]
 );
 
 const lightboxInstance = new SimpleLightbox('.js-gallery a', {
   className: 'lightbox-wrapper',
 });
-
-render.Element.hide(refs.loadmore);
 
 render.Spinner.markup =
   '<div id="spinner-container" style="padding-top: 25px; display:flex; flex-direction:column; gap:15px; align-items:center;"><span class="js-processing-request">Loading images, please wait...</span><div class="loader"></div></div>';
@@ -115,23 +122,3 @@ refs.loadmore.addEventListener('click', async e => {
 //     }, 100);
 //   }
 // });
-
-refs.checkbox.addEventListener('click', () => {
-  if (!refs.container.innerHTML) return;
-
-  const descriptionElem = document.querySelectorAll('.js-item-desc');
-  descriptionElem.forEach(x => {
-    refs.checkbox.checked
-      ? (x.style.transitionDuration = '450ms')
-      : (x.style.transitionDuration = '250ms');
-    refs.checkbox.checked
-      ? (x.parentElement.style.transitionDuration = '250ms')
-      : (x.parentElement.style.transitionDuration = '450ms');
-    refs.checkbox.checked
-      ? (x.style.marginTop = '0')
-      : (x.style.marginTop = '-56px');
-    refs.checkbox.checked
-      ? (x.parentElement.style.height = '256px')
-      : (x.parentElement.style.height = '200px');
-  });
-});

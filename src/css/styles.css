@@ -156,17 +156,6 @@ button {
   height: auto;
 }
 
-.js-gallery-item {
-  border-radius: 5px;
-  overflow: hidden;
-  box-shadow: 0px 0px 10px 0px rgba(38, 38, 38, 0.15);
-  opacity: 0;
-  transition: box-shadow 250ms cubic-bezier(0.47, 0, 0.745, 0.715),
-    opacity 250ms cubic-bezier(0.47, 0, 0.745, 0.715),
-    scale 250ms cubic-bezier(0.47, 0, 0.745, 0.715),
-    height 250ms cubic-bezier(0.47, 0, 0.745, 0.715);
-}
-
 .js-image-container {
   display: block;
   position: relative;
@@ -184,8 +173,30 @@ button {
   height: 100%;
 }
 
+.js-gallery-item {
+  height: 200px;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0px 0px 10px 0px rgba(38, 38, 38, 0.15);
+  opacity: 0;
+  transition: box-shadow 250ms cubic-bezier(0.47, 0, 0.745, 0.715),
+    opacity 250ms cubic-bezier(0.47, 0, 0.745, 0.715),
+    scale 250ms cubic-bezier(0.47, 0, 0.745, 0.715),
+    height 450ms cubic-bezier(0.47, 0, 0.745, 0.715);
+}
+
+.js-gallery-item-ext {
+  height: 256px;
+  transition: box-shadow 250ms cubic-bezier(0.47, 0, 0.745, 0.715),
+    opacity 250ms cubic-bezier(0.47, 0, 0.745, 0.715),
+    scale 250ms cubic-bezier(0.47, 0, 0.745, 0.715),
+    height 250ms cubic-bezier(0.47, 0, 0.745, 0.715);
+}
+
 .js-gallery-item:hover,
-.js-gallery-item:focus {
+.js-gallery-item:focus,
+.js-gallery-item-ext:hover,
+.js-gallery-item-ext:focus {
   scale: 1.02;
   box-shadow: 0px 0px 20px 0px rgba(38, 38, 38, 0.3);
 }
@@ -197,9 +208,13 @@ button {
   justify-content: space-between;
   align-items: center;
   padding: 8px 16px;
-  transition-property: margin-top;
-  transition-duration: 250ms;
-  transition-timing-function: cubic-bezier(0.47, 0, 0.745, 0.715);
+  margin-top: -56px;
+  transition: margin-top 250ms cubic-bezier(0.47, 0, 0.745, 0.715);
+}
+
+.js-item-desc-ext {
+  margin-top: 0;
+  transition: margin-top 450ms cubic-bezier(0.47, 0, 0.745, 0.715);
 }
 
 .js-desc-wrapper {

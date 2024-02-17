@@ -3,13 +3,6 @@ import closeIcon from '../img/izitoast-close.svg';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
-/**
- * @class - Provides developer with static methods allowing to add and remove loading spinner.
- * @var markup - Static property which value needs to be set by developer specifying spinner markup.
- * @method add() - Adds a spinner as a child of body element.
- * @method remove() - Removes last added spinner.
- */
-
 export class Spinner {
   static markup;
 
@@ -26,10 +19,6 @@ export class Spinner {
     document.body.removeChild(spinnerElem);
   }
 }
-
-/**
- * @class - Use to hide or show your element. Requires at least one of CSS classes .visible | .hidden to be described in styles.css.
- */
 
 export class Element {
   constructor() {}
@@ -49,31 +38,13 @@ export class Element {
   }
 }
 
-/**
- * @param {string} parentElemQuery Expects a string containing DOM element query (class, id, etc).
- * @param {array} imgData Expects an array of three image properties to look for in data (largeImageURL, thumbnailURL, altText).
- * @param {array} descData Expects an array of additional description properties to look for in data (downloads, size, comments, etc).
- * @param {boolean} showDesc Expects a boolean value to render detailed information or not.
- */
-
 export class Gallery {
-  constructor(
-    parentElemQuery = '',
-    imgData = null,
-    descData = null,
-    showDesc = document.querySelector('.js-loadmore-button') || true
-  ) {
+  constructor(parentElemQuery, data = null, showDesc) {
     this.parent = parentElemQuery;
-    this.imgData = imgData;
-    this.descData = descData;
+    this.data = data;
     this.showDesc = showDesc;
-    this.markup = this.#createMarkup(this.imgData, this.descData);
+    this.markup = this.#createMarkup(this.data);
   }
-
-  /**
-   * @param {string} result Accepts one of two strings: 'wrong input' | 'nothing found | 'sorry'.
-   * @description Displays a popup area providing user with a feedback from the app.
-   */
 
   static showPopup(requestResult, inputElemQuery = 'input') {
     const options = {
@@ -138,65 +109,54 @@ export class Gallery {
     iziToast.show(options);
   }
 
-  /**
-   * @param {array} imageData Expects an array of objects containing information related to each image, and alternative text to be shown.
-   * @param {array} descriptionData Expects an array of objects containing information related to each image description.
-   * @returns {string} Returns a ready for use markup with or without image description.
-   */
-
-  #createMarkup(imageData, descriptionData) {
-    const description = descriptionData.map(x =>
-      this.showDesc
-        ? `<ul class="js-item-desc" style="margin-top: 0; transition-duration: 250ms;">
-            <li class="js-desc-wrapper">
-              <span class="js-desc-prop">Likes</span>
-              <span class="js-desc-value">${x.likes}</span>
-            </li>
-            <li class="js-desc-wrapper">
-              <span class="js-desc-prop">Views</span>
-              <span class="js-desc-value">${x.views}</span>
-            </li>
-            <li class="js-desc-wrapper">
-              <span class="js-desc-prop">Comments</span>
-              <span class="js-desc-value">${x.comments}</span>
-            </li>
-            <li class="js-desc-wrapper">
-              <span class="js-desc-prop">Downloads</span>
-              <span class="js-desc-value">${x.downloads}</span>
-            </li>
-          </ul>`
-        : `<ul class="js-item-desc style="margin-top: -56px; transition-duration: 450ms;">
-            <li class="js-desc-wrapper">
-              <span class="js-desc-prop">Likes</span>
-              <span class="js-desc-value">${x.likes}</span>
-            </li>
-            <li class="js-desc-wrapper">
-              <span class="js-desc-prop">Views</span>
-              <span class="js-desc-value">${x.views}</span>
-            </li>
-            <li class="js-desc-wrapper">
-              <span class="js-desc-prop">Comments</span>
-              <span class="js-desc-value">${x.comments}</span>
-            </li>
-            <li class="js-desc-wrapper">
-              <span class="js-desc-prop">Downloads</span>
-              <span class="js-desc-value">${x.downloads}</span>
-            </li>
-          </ul>`
-    );
-    const markup = imageData
-      .map((x, i) =>
+  #createMarkup(data) {
+    const markup = data
+      .map(x =>
         this.showDesc
-          ? `<li class="js-gallery-item" style="height: 256px; transition-duration: 250ms;"><a class="js-image-container" href="${x.largeImageURL}"><img class="js-item-image" src="${x.webformatURL}" alt="${x.tags}" /></a>${description[i]}</li>`
-          : `<li class="js-gallery-item" style="height: 200px; transition-duration: 450ms;"><a class="js-image-container" href="${x.largeImageURL}"><img class="js-item-image" src="${x.webformatURL}" alt="${x.tags}" /></a>${description[i]}</li>`
+          ? `<li class="js-gallery-item js-gallery-item-ext"><a class="js-image-container" href="${x.largeImageURL}"><img class="js-item-image" src="${x.webformatURL}" alt="${x.tags}" /></a>
+            <ul class="js-item-desc js-item-desc-ext">
+              <li class="js-desc-wrapper">
+                <span class="js-desc-prop">Likes</span>
+                <span class="js-desc-value">${x.likes}</span>
+              </li>
+              <li class="js-desc-wrapper">
+                <span class="js-desc-prop">Views</span>
+                <span class="js-desc-value">${x.views}</span>
+              </li>
+              <li class="js-desc-wrapper">
+                <span class="js-desc-prop">Comments</span>
+                <span class="js-desc-value">${x.comments}</span>
+              </li>
+              <li class="js-desc-wrapper">
+                <span class="js-desc-prop">Downloads</span>
+                <span class="js-desc-value">${x.downloads}</span>
+              </li>
+            </ul>
+          </li>`
+          : `<li class="js-gallery-item"><a class="js-image-container" href="${x.largeImageURL}"><img class="js-item-image" src="${x.webformatURL}" alt="${x.tags}" /></a>
+            <ul class="js-item-desc">
+              <li class="js-desc-wrapper">
+                <span class="js-desc-prop">Likes</span>
+                <span class="js-desc-value">${x.likes}</span>
+              </li>
+              <li class="js-desc-wrapper">
+                <span class="js-desc-prop">Views</span>
+                <span class="js-desc-value">${x.views}</span>
+              </li>
+              <li class="js-desc-wrapper">
+                <span class="js-desc-prop">Comments</span>
+                <span class="js-desc-value">${x.comments}</span>
+              </li>
+              <li class="js-desc-wrapper">
+                <span class="js-desc-prop">Downloads</span>
+                <span class="js-desc-value">${x.downloads}</span>
+              </li>
+            </ul>
+          </li>`
       )
       .join('\n\n');
     return markup;
   }
-
-  /**
-   * @description Adds new markup to the parent element.
-   */
 
   render(imageElemQuery, galleryItemElemQuery) {
     document.querySelector(this.parent).innerHTML += this.markup;
@@ -211,7 +171,24 @@ export class Gallery {
       })
     );
   }
+
+  toggleDesc(descElemQuery, showDesc) {
+    const parent = document.querySelector(this.parent);
+    const itemDesc = document.querySelectorAll(descElemQuery);
+    if (!parent.innerHTML) return;
+
+    itemDesc.forEach(x => {
+      if (showDesc) {
+        x.classList.add('js-item-desc-ext');
+        x.parentElement.classList.add('js-gallery-item-ext');
+      } else {
+        x.classList.remove('js-item-desc-ext');
+        x.parentElement.classList.remove('js-gallery-item-ext');
+      }
+    });
+  }
 }
+
 export function smoothScroll(itemParentElem, descriptionShown) {
   const containerCSSStyles = window.getComputedStyle(itemParentElem);
   const containerGap = parseFloat(containerCSSStyles.rowGap);
