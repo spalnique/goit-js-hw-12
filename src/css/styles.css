@@ -182,19 +182,12 @@ button {
   object-fit: cover;
   width: 100%;
   height: 100%;
-  filter: grayscale();
-  transition: filter 250ms cubic-bezier(0.47, 0, 0.745, 0.715);
 }
 
 .js-gallery-item:hover,
 .js-gallery-item:focus {
   scale: 1.02;
   box-shadow: 0px 0px 20px 0px rgba(38, 38, 38, 0.3);
-}
-
-.js-gallery-item:hover .js-item-image,
-.js-gallery-item:focus .js-item-image {
-  filter: none;
 }
 
 .js-item-desc {
@@ -249,13 +242,13 @@ button {
   width: 64px;
   height: 64px;
   position: relative;
-  background: #FFF;
+  background: #fff;
   border-radius: 4px;
   overflow: hidden;
 }
 
 .loader:before {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   bottom: 0;
@@ -268,7 +261,7 @@ button {
 }
 
 .loader:after {
-  content: "";
+  content: '';
   position: absolute;
   left: 10px;
   top: 10px;
@@ -282,29 +275,33 @@ button {
 }
 
 @keyframes slide {
-  0% , 100% {
-    bottom: -35px
+  0%,
+  100% {
+    bottom: -35px;
   }
 
-  25% , 75% {
-    bottom: -2px
+  25%,
+  75% {
+    bottom: -2px;
   }
 
-  20% , 80% {
-    bottom: 2px
+  20%,
+  80% {
+    bottom: 2px;
   }
 }
 
 @keyframes rotate {
   0% {
-    transform: rotate(-15deg)
+    transform: rotate(-15deg);
   }
 
-  25% , 75% {
-    transform: rotate(0deg)
+  25%,
+  75% {
+    transform: rotate(0deg);
   }
 
   100% {
-    transform: rotate(25deg)
+    transform: rotate(25deg);
   }
 }

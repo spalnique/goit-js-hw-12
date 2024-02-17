@@ -147,7 +147,7 @@ export class Gallery {
   #createMarkup(imageData, descriptionData) {
     const description = descriptionData.map(x =>
       this.showDesc
-        ? `<ul class="js-item-desc style="margin-top: 0; transition-duration: 250ms;">
+        ? `<ul class="js-item-desc" style="margin-top: 0; transition-duration: 250ms;">
             <li class="js-desc-wrapper">
               <span class="js-desc-prop">Likes</span>
               <span class="js-desc-value">${x.likes}</span>
