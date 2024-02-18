@@ -209,12 +209,16 @@ button {
   align-items: center;
   padding: 8px 16px;
   margin-top: -56px;
-  transition: margin-top 250ms cubic-bezier(0.47, 0, 0.745, 0.715);
+  opacity: 0;
+  transition: margin-top 250ms cubic-bezier(0.47, 0, 0.745, 0.715),
+    opacity 150ms cubic-bezier(0.47, 0, 0.745, 0.715);
 }
 
 .js-item-desc-ext {
   margin-top: 0;
-  transition: margin-top 450ms cubic-bezier(0.47, 0, 0.745, 0.715);
+  opacity: 1;
+  transition: margin-top 450ms cubic-bezier(0.47, 0, 0.745, 0.715),
+    opacity 650ms cubic-bezier(0.47, 0, 0.745, 0.715);
 }
 
 .js-desc-wrapper {

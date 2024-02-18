@@ -189,14 +189,14 @@ export class Gallery {
   }
 }
 
-export function smoothScroll(itemParentElem, descriptionShown) {
+export function smoothScroll(itemParentElem, showDesc) {
   const containerCSSStyles = window.getComputedStyle(itemParentElem);
   const containerGap = parseFloat(containerCSSStyles.rowGap);
   const itemHeight = parseFloat(
     itemParentElem.lastChild.getBoundingClientRect().height
   );
   window.scrollBy({
-    top: descriptionShown
+    top: showDesc
       ? itemHeight * 2.75 + containerGap
       : itemHeight * 2.5 + containerGap,
     behavior: 'smooth',

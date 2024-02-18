@@ -80,7 +80,7 @@ const requestParams = {
     safesearch: true,
     q: null,
     page: 1,
-    per_page: 15,
+    per_page: 200,
   },
 };
 
@@ -109,6 +109,8 @@ refs.form.addEventListener('submit', async e => {
   await onclick(e);
 });
 refs.loadmore.addEventListener('click', async e => {
+  console.log(document.body.scrollHeight);
+
   await onclick(e);
   render.smoothScroll(refs.container, refs.checkbox.checked);
 });
