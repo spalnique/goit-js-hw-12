@@ -18,12 +18,9 @@ export class FetchPixabay {
   async get() {
     if (!this.requestURL || !this.requestConfig) return;
 
-    const response = async () =>
-      await axios.get(this.requestURL, {
-        params: this.requestConfig,
-      });
-
-    const data = await response();
+    const data = await axios.get(this.requestURL, {
+      params: this.requestConfig,
+    });
     this.totalHits = data.data.totalHits;
     this.data = this.#dataFilter(data.data.hits, this.propsList);
   }
